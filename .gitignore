@@ -9,5 +9,3 @@ hosts
 .venv/
 out/
 vendor/
-pkg/client/listers/
-pkg/client/informers/

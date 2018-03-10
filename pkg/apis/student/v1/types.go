@@ -1,5 +1,5 @@
 /*
-Copyright 2017 The Rook Authors. All rights reserved.
+Copyright 2018 Jack Lin (jacklin@lsalab.cs.nthu.edu.tw)
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
@@ -15,7 +15,7 @@ limitations under the License.
 */
 
 // Package v1alpha1 for a sample crd
-package v1alpha1
+package v1
 
 import metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
 
@@ -23,20 +23,40 @@ import metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
 // +genclient:noStatus
 // +k8s:deepcopy-gen:interfaces=k8s.io/apimachinery/pkg/runtime.Object
 
-type Sample struct {
+type Student struct {
 	metav1.TypeMeta   `json:",inline"`
 	metav1.ObjectMeta `json:"metadata"`
-	Spec              SampleSpec `json:"spec"`
+
+	Spec   StudentSpec   `json:"spec"`
+    Status StudentStatus `json:"status"`
 }
 
-type SampleSpec struct {
-	Hello string `json:"hello"`
+type StudentSpec struct {
+	TaskName string `json:"taskName"`
+    Threads  *int32 `json:"threads"`
 }
+
+type StudentLifeState string
+
+const (
+        Health  StudentLifeState = "Health!"
+        Sick    StudentLifeState = "Sick!"
+        Dead    StudentLifeState = "Dead!"
+
+)
+
+type EmployeeStatus struct {
+    AvailableThreads int32              `json:"availableThreads"`
+    LifeState        StudentLifeState   `json:"lifeState"`
+    Message          string             `json:"message"`
+    LastLiveTime     metav1.Time        `json:"lastLiveTime"`
+}
+
 
 // +k8s:deepcopy-gen:interfaces=k8s.io/apimachinery/pkg/runtime.Object
 
 type SampleList struct {
 	metav1.TypeMeta `json:",inline"`
 	metav1.ListMeta `json:"metadata"`
-	Items           []Sample `json:"items"`
+	Items           []Student `json:"items"`
 }
