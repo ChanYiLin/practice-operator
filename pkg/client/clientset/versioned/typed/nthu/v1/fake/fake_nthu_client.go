@@ -19,23 +19,23 @@ limitations under the License.
 package fake
 
 import (
-	v1 "practice-operator/pkg/client/clientset/versioned/typed/myproject/v1"
+	v1 "practice-operator/pkg/client/clientset/versioned/typed/nthu/v1"
 
 	rest "k8s.io/client-go/rest"
 	testing "k8s.io/client-go/testing"
 )
 
-type FakeMyprojectV1 struct {
+type FakeNthuV1 struct {
 	*testing.Fake
 }
 
-func (c *FakeMyprojectV1) Students(namespace string) v1.StudentInterface {
+func (c *FakeNthuV1) Students(namespace string) v1.StudentInterface {
 	return &FakeStudents{c, namespace}
 }
 
 // RESTClient returns a RESTClient that is used to communicate
 // with API server by this client implementation.
-func (c *FakeMyprojectV1) RESTClient() rest.Interface {
+func (c *FakeNthuV1) RESTClient() rest.Interface {
 	var ret *rest.RESTClient
 	return ret
 }

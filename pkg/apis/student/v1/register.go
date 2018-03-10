@@ -14,7 +14,7 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-// Package v1alpha1 for a sample crd
+// Package v1 for a sample crd
 package v1
 
 import (
@@ -36,7 +36,7 @@ var (
 // schemeGroupVersion is group version used to register these objects
 var SchemeGroupVersion = schema.GroupVersion{Group: "nthu.com", Version: "v1"}
 
-var SampleResource = opkit.CustomResource{
+var StudentResource = opkit.CustomResource{
 	Name:    "student",
 	Plural:  "students",
 	Group:   "nthu.com",

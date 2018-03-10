@@ -54,7 +54,7 @@ type students struct {
 }
 
 // newStudents returns a Students
-func newStudents(c *MyprojectV1Client, namespace string) *students {
+func newStudents(c *NthuV1Client, namespace string) *students {
 	return &students{
 		client: c.RESTClient(),
 		ns:     namespace,

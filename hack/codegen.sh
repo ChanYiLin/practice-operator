@@ -36,7 +36,7 @@ CODEGEN_PKG=${CODEGEN_PKG:-$(cd ${SCRIPT_ROOT}; ls -d -1 ../vendor/k8s.io/code-g
 ${CODEGEN_PKG}/generate-groups.sh all \
         practice-operator/pkg/client \
         practice-operator/pkg/apis \
-        "student:v1" \ 
-        --output-base "$(dirname ${BASH_SOURCE})/../../../../" \
-        --go-header-file ${SCRIPT_ROOT}/boilerplate/boilerplate.go.txt
+        "student:v1"
+       # --go-header-file ${SCRIPT_ROOT}/boilerplate/boilerplate.go.txt
 
+       # --output-base "$(dirname ${BASH_SOURCE})/../../../../" \

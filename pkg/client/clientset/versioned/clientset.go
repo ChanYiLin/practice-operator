@@ -19,7 +19,7 @@ limitations under the License.
 package versioned
 
 import (
-	myprojectv1 "practice-operator/pkg/client/clientset/versioned/typed/myproject/v1"
+	nthuv1 "practice-operator/pkg/client/clientset/versioned/typed/nthu/v1"
 
 	glog "github.com/golang/glog"
 	discovery "k8s.io/client-go/discovery"
@@ -29,27 +29,27 @@ import (
 
 type Interface interface {
 	Discovery() discovery.DiscoveryInterface
-	MyprojectV1() myprojectv1.MyprojectV1Interface
+	NthuV1() nthuv1.NthuV1Interface
 	// Deprecated: please explicitly pick a version if possible.
-	Myproject() myprojectv1.MyprojectV1Interface
+	Nthu() nthuv1.NthuV1Interface
 }
 
 // Clientset contains the clients for groups. Each group has exactly one
 // version included in a Clientset.
 type Clientset struct {
 	*discovery.DiscoveryClient
-	myprojectV1 *myprojectv1.MyprojectV1Client
+	nthuV1 *nthuv1.NthuV1Client
 }
 
-// MyprojectV1 retrieves the MyprojectV1Client
-func (c *Clientset) MyprojectV1() myprojectv1.MyprojectV1Interface {
-	return c.myprojectV1
+// NthuV1 retrieves the NthuV1Client
+func (c *Clientset) NthuV1() nthuv1.NthuV1Interface {
+	return c.nthuV1
 }
 
-// Deprecated: Myproject retrieves the default version of MyprojectClient.
+// Deprecated: Nthu retrieves the default version of NthuClient.
 // Please explicitly pick a version.
-func (c *Clientset) Myproject() myprojectv1.MyprojectV1Interface {
-	return c.myprojectV1
+func (c *Clientset) Nthu() nthuv1.NthuV1Interface {
+	return c.nthuV1
 }
 
 // Discovery retrieves the DiscoveryClient
@@ -68,7 +68,7 @@ func NewForConfig(c *rest.Config) (*Clientset, error) {
 	}
 	var cs Clientset
 	var err error
-	cs.myprojectV1, err = myprojectv1.NewForConfig(&configShallowCopy)
+	cs.nthuV1, err = nthuv1.NewForConfig(&configShallowCopy)
 	if err != nil {
 		return nil, err
 	}
@@ -85,7 +85,7 @@ func NewForConfig(c *rest.Config) (*Clientset, error) {
 // panics if there is an error in the config.
 func NewForConfigOrDie(c *rest.Config) *Clientset {
 	var cs Clientset
-	cs.myprojectV1 = myprojectv1.NewForConfigOrDie(c)
+	cs.nthuV1 = nthuv1.NewForConfigOrDie(c)
 
 	cs.DiscoveryClient = discovery.NewDiscoveryClientForConfigOrDie(c)
 	return &cs
@@ -94,7 +94,7 @@ func NewForConfigOrDie(c *rest.Config) *Clientset {
 // New creates a new Clientset for the given RESTClient.
 func New(c rest.Interface) *Clientset {
 	var cs Clientset
-	cs.myprojectV1 = myprojectv1.New(c)
+	cs.nthuV1 = nthuv1.New(c)
 
 	cs.DiscoveryClient = discovery.NewDiscoveryClient(c)
 	return &cs

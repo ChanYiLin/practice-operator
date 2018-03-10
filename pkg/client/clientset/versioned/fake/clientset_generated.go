@@ -20,8 +20,8 @@ package fake
 
 import (
 	clientset "practice-operator/pkg/client/clientset/versioned"
-	myprojectv1 "practice-operator/pkg/client/clientset/versioned/typed/myproject/v1"
-	fakemyprojectv1 "practice-operator/pkg/client/clientset/versioned/typed/myproject/v1/fake"
+	nthuv1 "practice-operator/pkg/client/clientset/versioned/typed/nthu/v1"
+	fakenthuv1 "practice-operator/pkg/client/clientset/versioned/typed/nthu/v1/fake"
 
 	"k8s.io/apimachinery/pkg/runtime"
 	"k8s.io/apimachinery/pkg/watch"
@@ -63,12 +63,12 @@ func (c *Clientset) Discovery() discovery.DiscoveryInterface {
 
 var _ clientset.Interface = &Clientset{}
 
-// MyprojectV1 retrieves the MyprojectV1Client
-func (c *Clientset) MyprojectV1() myprojectv1.MyprojectV1Interface {
-	return &fakemyprojectv1.FakeMyprojectV1{Fake: &c.Fake}
+// NthuV1 retrieves the NthuV1Client
+func (c *Clientset) NthuV1() nthuv1.NthuV1Interface {
+	return &fakenthuv1.FakeNthuV1{Fake: &c.Fake}
 }
 
-// Myproject retrieves the MyprojectV1Client
-func (c *Clientset) Myproject() myprojectv1.MyprojectV1Interface {
-	return &fakemyprojectv1.FakeMyprojectV1{Fake: &c.Fake}
+// Nthu retrieves the NthuV1Client
+func (c *Clientset) Nthu() nthuv1.NthuV1Interface {
+	return &fakenthuv1.FakeNthuV1{Fake: &c.Fake}
 }

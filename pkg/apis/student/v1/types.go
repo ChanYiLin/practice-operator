@@ -45,7 +45,7 @@ const (
 
 )
 
-type EmployeeStatus struct {
+type StudentStatus struct {
     AvailableThreads int32              `json:"availableThreads"`
     LifeState        StudentLifeState   `json:"lifeState"`
     Message          string             `json:"message"`
@@ -55,7 +55,7 @@ type EmployeeStatus struct {
 
 // +k8s:deepcopy-gen:interfaces=k8s.io/apimachinery/pkg/runtime.Object
 
-type SampleList struct {
+type StudentList struct {
 	metav1.TypeMeta `json:",inline"`
 	metav1.ListMeta `json:"metadata"`
 	Items           []Student `json:"items"`

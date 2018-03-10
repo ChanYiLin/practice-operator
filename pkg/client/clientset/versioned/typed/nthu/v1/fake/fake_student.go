@@ -31,13 +31,13 @@ import (
 
 // FakeStudents implements StudentInterface
 type FakeStudents struct {
-	Fake *FakeMyprojectV1
+	Fake *FakeNthuV1
 	ns   string
 }
 
-var studentsResource = schema.GroupVersionResource{Group: "myproject", Version: "v1", Resource: "students"}
+var studentsResource = schema.GroupVersionResource{Group: "nthu.com", Version: "v1", Resource: "students"}
 
-var studentsKind = schema.GroupVersionKind{Group: "myproject", Version: "v1", Kind: "Student"}
+var studentsKind = schema.GroupVersionKind{Group: "nthu.com", Version: "v1", Kind: "Student"}
 
 // Get takes name of the student, and returns the corresponding student object, and an error if there is any.
 func (c *FakeStudents) Get(name string, options v1.GetOptions) (result *student_v1.Student, err error) {

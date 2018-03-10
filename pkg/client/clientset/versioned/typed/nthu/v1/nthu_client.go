@@ -26,22 +26,22 @@ import (
 	rest "k8s.io/client-go/rest"
 )
 
-type MyprojectV1Interface interface {
+type NthuV1Interface interface {
 	RESTClient() rest.Interface
 	StudentsGetter
 }
 
-// MyprojectV1Client is used to interact with features provided by the myproject group.
-type MyprojectV1Client struct {
+// NthuV1Client is used to interact with features provided by the nthu.com group.
+type NthuV1Client struct {
 	restClient rest.Interface
 }
 
-func (c *MyprojectV1Client) Students(namespace string) StudentInterface {
+func (c *NthuV1Client) Students(namespace string) StudentInterface {
 	return newStudents(c, namespace)
 }
 
-// NewForConfig creates a new MyprojectV1Client for the given config.
-func NewForConfig(c *rest.Config) (*MyprojectV1Client, error) {
+// NewForConfig creates a new NthuV1Client for the given config.
+func NewForConfig(c *rest.Config) (*NthuV1Client, error) {
 	config := *c
 	if err := setConfigDefaults(&config); err != nil {
 		return nil, err
@@ -50,12 +50,12 @@ func NewForConfig(c *rest.Config) (*MyprojectV1Client, error) {
 	if err != nil {
 		return nil, err
 	}
-	return &MyprojectV1Client{client}, nil
+	return &NthuV1Client{client}, nil
 }
 
-// NewForConfigOrDie creates a new MyprojectV1Client for the given config and
+// NewForConfigOrDie creates a new NthuV1Client for the given config and
 // panics if there is an error in the config.
-func NewForConfigOrDie(c *rest.Config) *MyprojectV1Client {
+func NewForConfigOrDie(c *rest.Config) *NthuV1Client {
 	client, err := NewForConfig(c)
 	if err != nil {
 		panic(err)
@@ -63,9 +63,9 @@ func NewForConfigOrDie(c *rest.Config) *MyprojectV1Client {
 	return client
 }
 
-// New creates a new MyprojectV1Client for the given RESTClient.
-func New(c rest.Interface) *MyprojectV1Client {
-	return &MyprojectV1Client{c}
+// New creates a new NthuV1Client for the given RESTClient.
+func New(c rest.Interface) *NthuV1Client {
+	return &NthuV1Client{c}
 }
 
 func setConfigDefaults(config *rest.Config) error {
@@ -83,7 +83,7 @@ func setConfigDefaults(config *rest.Config) error {
 
 // RESTClient returns a RESTClient that is used to communicate
 // with API server by this client implementation.
-func (c *MyprojectV1Client) RESTClient() rest.Interface {
+func (c *NthuV1Client) RESTClient() rest.Interface {
 	if c == nil {
 		return nil
 	}
