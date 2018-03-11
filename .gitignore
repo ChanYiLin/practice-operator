@@ -9,3 +9,4 @@ hosts
 .venv/
 out/
 vendor/
+pkg/operator/operator

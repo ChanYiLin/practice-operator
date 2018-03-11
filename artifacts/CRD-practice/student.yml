@@ -1,0 +1,7 @@
+apiVersion: nthu.com/v1
+kind: Student
+metadata:
+  name: jack
+spec:
+  taskName: survey
+  threads: 1

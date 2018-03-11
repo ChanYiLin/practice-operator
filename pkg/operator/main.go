@@ -62,7 +62,7 @@ func main() {
 
     // create signals to stop watching the resources
     signalChan := make(chan os.Signal, 1)
-    stopChan := make(chanstruct{})
+    stopChan := make(chan struct{})
     signal.Notify(signalChan, syscall.SIGINT, syscall.SIGTERM)
 
     // start watching the student resource

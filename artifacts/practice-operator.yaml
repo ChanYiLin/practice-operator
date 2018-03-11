@@ -1,0 +1,61 @@
+kind: ClusterRole
+apiVersion: rbac.authorization.k8s.io/v1beta1
+metadata:
+  name: practice-operator
+rules:
+- apiGroups:
+  - apiextensions.k8s.io
+  - apps
+  resources:
+  - customresourcedefinitions
+  - deployments
+  verbs:
+  - get
+  - list
+  - watch
+  - update
+  - create
+  - delete
+- apiGroups:
+  - nthu.com
+  resources:
+  - "*"
+  verbs:
+  - "*"
+---
+apiVersion: v1
+kind: ServiceAccount
+metadata:
+  name: practice-operator
+  namespace: default
+---
+kind: ClusterRoleBinding
+apiVersion: rbac.authorization.k8s.io/v1beta1
+metadata:
+  name: practice-operator
+  namespace: default
+roleRef:
+  apiGroup: rbac.authorization.k8s.io
+  kind: ClusterRole
+  name: practice-operator
+subjects:
+- kind: ServiceAccount
+  name: practice-operator
+  namespace: default
+---
+apiVersion: apps/v1beta1
+kind: Deployment
+metadata:
+  name: practice-operator
+  namespace: default
+spec:
+  replicas: 1
+  template:
+    metadata:
+      labels:
+        app: practice-operator
+    spec:
+      serviceAccountName: practice-operator
+      containers:
+      - name: practice-operator
+        image: jackfantasy/practice-operator:0.3

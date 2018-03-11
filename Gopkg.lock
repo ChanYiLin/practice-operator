@@ -338,6 +338,7 @@
   name = "k8s.io/client-go"
   packages = [
     "discovery",
+    "discovery/fake",
     "kubernetes",
     "kubernetes/scheme",
     "kubernetes/typed/admissionregistration/v1alpha1",
@@ -367,6 +368,7 @@
     "pkg/version",
     "rest",
     "rest/watch",
+    "testing",
     "tools/cache",
     "tools/clientcmd/api",
     "tools/metrics",
@@ -422,6 +424,6 @@
 [solve-meta]
   analyzer-name = "dep"
   analyzer-version = 1
-  inputs-digest = "df0fb18e369dbeac6367d67669e3106877fd64d6ffa1189146f9b8a991656a94"
+  inputs-digest = "55c946e0c734fd24f18232c18504a8d2f7fda7ed05223ac44c9d56acd2bbf545"
   solver-name = "gps-cdcl"
   solver-version = 1

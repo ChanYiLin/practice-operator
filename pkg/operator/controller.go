@@ -20,8 +20,8 @@ package main
 
 import (
     "fmt"
-    "reflect"
-    "time"
+
+    "github.com/golang/glog"
 
     opkit "github.com/rook/operator-kit"
     studentv1 "practice-operator/pkg/apis/student/v1"
@@ -29,13 +29,12 @@ import (
     "k8s.io/client-go/tools/cache"
 
 
-    appsv1 "k8s.io/api/apps/v1"
+    appsv1beta1 "k8s.io/api/apps/v1beta1"
     corev1 "k8s.io/api/core/v1"
     metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
 
     "k8s.io/apimachinery/pkg/runtime/schema"
     "k8s.io/apimachinery/pkg/util/clock"
-    "k8s.io/client-go/tools/cache"
 )
 
 
@@ -70,7 +69,7 @@ func (c *Controller) StartWatch(namespace string, stopCh chan struct{}) error {
         DeleteFunc: c.onDelete,
     }
 
-    fmt.Printf("start watching resources in namespace %s", namespace)
+    glog.Infof("start watching resources in namespace %s", namespace)
     
     restClient := c.clientset.RESTClient()
     watcher := opkit.NewWatcher(studentv1.StudentResource, namespace, resourceHandlers, restClient)
@@ -85,10 +84,11 @@ func (c *Controller) StartWatch(namespace string, stopCh chan struct{}) error {
 func (c *Controller) onAdd(obj interface{}) {
     student := obj.(*studentv1.Student).DeepCopy()
     
-    fmt.Printf("%s resource onAdd.", student.Name)
+    glog.Infof("%s resource onAdd.", student.Name)
     //fmt.Printf("Added Sample '%s' with Hello=%s\n", s.Name, s.Spec.Hello)
 
-    deployment, _ := c.context.Clientset.AppsV1().Deployments(student.Namespace).Create(newDeployment(student))
+    deployment, err := c.context.Clientset.AppsV1beta1().Deployments(student.Namespace).Create(newDeployment(student))
+    glog.Error(err)
     c.updateStatus(student, deployment)
 }
 
@@ -96,29 +96,30 @@ func (c *Controller) onAdd(obj interface{}) {
 func (c *Controller) onUpdate(oldObj, newObj interface{}) {
     oldStudent := oldObj.(*studentv1.Student).DeepCopy()
     newStudent := newObj.(*studentv1.Student).DeepCopy()
-    fmt.Printf("%s resource onUpdate.", Student.Name)
+    glog.Infof("%s resource onUpdate.", oldStudent.Name)
     //fmt.Printf("Updated sample '%s' from %s to %s\n", newSample.Name, oldSample.Spec.Hello, newSample.Spec.Hello)
 
-    deployment, _ := c.context.Clientset.AppsV1().Deployments(student.Namespace).Update(newDeployment(student))
+    deployment, err := c.context.Clientset.AppsV1beta1().Deployments(oldStudent.Namespace).Update(newDeployment(oldStudent))
+    glog.Error(err)
     c.updateStatus(newStudent, deployment)
 }
 
 func (c *Controller) onDelete(obj interface{}) {
     student := obj.(*studentv1.Student).DeepCopy()
 
-    fmt.Printf("%s resource onDelete.", student.Name)
+    glog.Infof("%s resource onDelete.", student.Name)
 
-    c.context.Clientset.AppsV1().Deployments(student.Namespace).Delete(student.Name, &metav1.DeleteOptions{})
+    c.context.Clientset.AppsV1beta1().Deployments(student.Namespace).Delete(student.Name, &metav1.DeleteOptions{})
     //fmt.Printf("Deleted sample '%s' with Hello=%s\n", s.Name, s.Spec.Hello)
 }
 
-func newDeployment(student *studentv1.Student) *appsv1.Deployment {
+func newDeployment(student *studentv1.Student) *appsv1beta1.Deployment {
     labels := map[string]string{
         "app":        "nginx",
         "controller": student.Name,
     }
-
-    return &appsv1.Deployment{
+    glog.Infof("Create Deployment student.", student)
+    return &appsv1beta1.Deployment{
         ObjectMeta: metav1.ObjectMeta{
             Name:      student.Spec.TaskName,
             Namespace: student.Namespace,
@@ -130,7 +131,7 @@ func newDeployment(student *studentv1.Student) *appsv1.Deployment {
                 }),
             },
         },
-        Spec: appsv1.DeploymentSpec{
+        Spec: appsv1beta1.DeploymentSpec{
             Replicas: student.Spec.Threads,
             Selector: &metav1.LabelSelector{
                 MatchLabels: labels,
@@ -152,23 +153,23 @@ func newDeployment(student *studentv1.Student) *appsv1.Deployment {
     }
 }
 
-func (c *Controller) updateStatus(student *studentv1.Student, deployment *appsv1.Deployment) error {
+func (c *Controller) updateStatus(student *studentv1.Student, deployment *appsv1beta1.Deployment) error {
     studentCopy := student.DeepCopy()
     studentCopy.Status.AvailableThreads = *student.Spec.Threads
 
     r := studentCopy.Status.AvailableThreads
     switch {
         case r <= 3:
-            studentCopy.Status.LiverState = studentv1.Health
+            studentCopy.Status.LifeState = studentv1.Health
         case r <= 9 && r > 3:
-            studentCopy.Status.LiverState = studentv1.Sick
+            studentCopy.Status.LifeState = studentv1.Sick
         case r > 9:
-            studentCopy.Status.LiverState = studentv1.Dead
+            studentCopy.Status.LifeState = studentv1.Dead
     }
 
     studentCopy.Status.Message = msg[studentCopy.Status.LifeState]
     studentCopy.Status.LastLiveTime = metav1.NewTime(c.clock.Now())
-    if _, err := c.clientset.Students(namespace).Update(studentCopy); err != nil {
+    if _, err := c.clientset.Students(student.Namespace).Update(studentCopy); err != nil {
         return fmt.Errorf("failed to update student %s status: %+v", student.Namespace, err)
     }
     return nil
