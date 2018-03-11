@@ -42,7 +42,7 @@ var StudentResource = opkit.CustomResource{
 	Group:   "nthu.com",
 	Version: "v1",
 	Scope:   apiextensionsv1beta1.NamespaceScoped,
-	Kind:    reflect.TypeOf(Sample{}).Name(),
+	Kind:    reflect.TypeOf(Student{}).Name(),
 }
 
 func init() {
